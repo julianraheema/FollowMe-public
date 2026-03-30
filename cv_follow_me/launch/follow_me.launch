@@ -1,0 +1,4 @@
+<launch>
+    <node pkg="cv_follow_me" type="ros_multi_modal_tracker.py" name="follow_me_python_node" output="screen">
+    </node>
+</launch>

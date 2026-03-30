@@ -1,0 +1,23 @@
+<launch>
+  <!-- Start the AoA host binary -->
+  <arg name="device" default="/dev/ttyACM0"/>
+  <arg name="mqtt" default="localhost:1883"/>
+  <arg name="config" default="$(find bt_follow_me)/NCP_Host/app/bluetooth/followme_bt_AoA_host/config/followme_locator_config.json"/>
+  
+  <!-- Filter parameters -->
+  <arg name="smoothing_enabled" default="true"/>
+  <arg name="min_window_size" default="3"/>
+  <arg name="max_window_size" default="10"/>
+  <arg name="velocity_threshold" default="0.5"/>
+  <arg name="noise_threshold" default="0.1"/>
+
+  <!-- Launch your external executable using rosrun -->
+  <node name="followme_bt_AoA_host" pkg="bt_follow_me" type="followme_bt_AoA_host" args="-u $(arg device) -m $(arg mqtt) -c $(arg config)" output="screen"/>
+  <node name="bt_follow_me_node" pkg="bt_follow_me" type="bt_follow_me_node" output="screen">
+    <param name="smoothing_enabled" value="$(arg smoothing_enabled)"/>
+    <param name="min_window_size" value="$(arg min_window_size)"/>
+    <param name="max_window_size" value="$(arg max_window_size)"/>
+    <param name="velocity_threshold" value="$(arg velocity_threshold)"/>
+    <param name="noise_threshold" value="$(arg noise_threshold)"/>
+  </node>
+</launch>

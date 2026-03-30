@@ -1,0 +1,42 @@
+#!/usr/bin/env python3
+import threading
+from flask import Flask, request
+import rospy
+from wsgiref.simple_server import make_server, WSGIRequestHandler
+
+app = Flask(__name__)
+_httpd = None  # will hold our HTTP server instance
+
+@app.route('/post_action', methods=['POST'])
+def post_action():
+    data = request.data.decode('utf-8')
+    rospy.loginfo("Received: %s", data)
+    return "OK", 200
+
+def _run_flask():
+    global _httpd
+    # bind to all interfaces on port 5000
+    _httpd = make_server('0.0.0.0', 5000, app, handler_class=WSGIRequestHandler)
+    rospy.loginfo("HTTP server listening on http://0.0.0.0:5000/post_action")
+    _httpd.serve_forever()
+
+def _shutdown_flask():
+    if _httpd:
+        rospy.loginfo("Shutting down HTTP server...")
+        _httpd.shutdown()
+
+def main():
+    rospy.init_node('post_action_node')
+    # launch Flask in a background thread
+    t = threading.Thread(target=_run_flask)
+    t.daemon = True
+    t.start()
+
+    # ensure HTTP server stops when ROS shuts down
+    rospy.on_shutdown(_shutdown_flask)
+    rospy.loginfo("post_action_node is up. Press Ctrl-C to exit.")
+    rospy.spin()
+
+if __name__ == '__main__':
+    main()
+

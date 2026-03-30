@@ -1,0 +1,38 @@
+<launch>
+  <!--
+    Launch the velocity-based person follower.
+    You can choose at startup whether to follow the BT or CV pose
+    by setting the use_bt_follower arg (default=false → follow CV).
+  -->
+
+  <!-- arg to pick initial mode: false = CV, true = BT -->
+  <arg name="use_bt_follower" default="false" />
+  <arg name="use_cv_follower" default="false" />
+
+  <!-- You can also override any of the controller params here -->
+  <arg name="k_rho"              default="0.6" />
+  <arg name="k_alpha"            default="1.0" />
+  <arg name="desired_distance"   default="0.5" />
+  <arg name="max_lin_vel"        default="1.0" />
+  <arg name="max_ang_vel"        default="1.0" />
+  <arg name="distance_tolerance" default="0.5" />
+
+  <node pkg="follow_me_engine"
+        type="follow_me_engine_pynode.py"
+        name="follow_me_engine_pynode"
+        output="screen">
+
+    <!-- initial mode -->
+    <param name="use_bt_follower" value="$(arg use_bt_follower)" />
+    <param name="use_cv_follower" value="$(arg use_cv_follower)" />
+
+    <!-- controller gains / thresholds -->
+    <param name="k_rho"            value="$(arg k_rho)" />
+    <param name="k_alpha"          value="$(arg k_alpha)" />
+    <param name="desired_distance" value="$(arg desired_distance)" />
+    <param name="max_lin_vel"      value="$(arg max_lin_vel)" />
+    <param name="max_ang_vel"      value="$(arg max_ang_vel)" />
+    <param name="distance_tolerance" value="$(arg distance_tolerance)" />
+  </node>
+</launch>
+
