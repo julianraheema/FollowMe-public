@@ -121,6 +121,5 @@ Software Disclaimer
 
 ---
 
-For any inquiries or support, please contact:  
-julian.y.raheema.civ@us.navy.mil  
+For any inquiries or support, please contact:
 jraheema@ucsd.edu
